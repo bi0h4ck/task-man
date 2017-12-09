@@ -11,20 +11,20 @@ object UserStorage {
 
   case class Id(value: String) extends AnyVal
   object Id{
-    implicit def idEncodeJson: EncodeJson[Id] = EncodeJson.of[String].contramap[Id](id => id.value)
-    implicit def idDecodeJson: DecodeJson[Id] = DecodeJson.of[String].map(idString => Id(idString))
+    implicit def idEncodeJson: EncodeJson[Id] = jencode1[Id, String](id => id.value)
+    implicit def idDecodeJson: DecodeJson[Id] = jdecode1[String, Id](idString => Id(idString))
   }
 
   case class Email(value: String) extends AnyVal
   object Email{
-    implicit def EmailEncoding: EncodeJson[Email] = EncodeJson.of[String].contramap[Email](email => email.value)
-    implicit def EmailDecoding: DecodeJson[Email] = DecodeJson.of[String].map(emailString => Email(emailString))
+    implicit def EmailEncoding: EncodeJson[Email] = jencode1[Email, String](email => email.value)
+    implicit def EmailDecoding: DecodeJson[Email] = jdecode1[String, Email](emailString => Email(emailString))
   }
 
   case class Password(value: String) extends AnyVal
   object Password{
-    implicit def PasswordEncoding: EncodeJson[Password] = EncodeJson.of[String].contramap[Password](password => password.value)
-    implicit def PasswordDecoding: DecodeJson[Password] = DecodeJson.of[String].map(passwordString => Password(passwordString))
+    implicit def PasswordEncoding: EncodeJson[Password] = jencode1[Password, String](password => password.value)
+    implicit def PasswordDecoding: DecodeJson[Password] = jdecode1[String, Password](passwordString => Password(passwordString))
   }
 
   case class User(id: Id, email: Email, password: Password)
