@@ -1,0 +1,47 @@
+package us.diempham.taskman.application
+
+import argonaut.CodecJson
+import argonaut._, Argonaut._
+import cats.effect.IO
+import org.http4s.argonaut._
+
+import scala.collection.mutable
+
+object UserStorage {
+
+  case class Id(value: String) extends AnyVal
+  object Id{
+    implicit def idEncodeJson: EncodeJson[Id] = EncodeJson.of[String].contramap[Id](id => id.value)
+    implicit def idDecodeJson: DecodeJson[Id] = DecodeJson.of[String].map(idString => Id(idString))
+  }
+
+  case class Email(value: String) extends AnyVal
+  object Email{
+    implicit def EmailEncoding: EncodeJson[Email] = EncodeJson.of[String].contramap[Email](email => email.value)
+    implicit def EmailDecoding: DecodeJson[Email] = DecodeJson.of[String].map(emailString => Email(emailString))
+  }
+
+  case class Password(value: String) extends AnyVal
+  object Password{
+    implicit def PasswordEncoding: EncodeJson[Password] = EncodeJson.of[String].contramap[Password](password => password.value)
+    implicit def PasswordDecoding: DecodeJson[Password] = DecodeJson.of[String].map(passwordString => Password(passwordString))
+  }
+
+  case class User(id: Id, email: Email, password: Password)
+  object User {
+    implicit def UserCodecJson: CodecJson[User] = casecodec3(User.apply, User.unapply)("id", "email", "password")
+
+    implicit val userDecoder = jsonOf[IO, User]
+  }
+
+  private val database: mutable.Map[Id, User] = mutable.Map.empty[Id, User]
+
+  def createUser(user: User) = {
+    database += (user.id -> User(user.id, user.email, user.password))
+  }
+
+  def deleteUser(id: Id) = {
+    database -= id
+  }
+
+}

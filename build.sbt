@@ -13,6 +13,9 @@ libraryDependencies ++= {
     // Json suppoer
     "org.http4s"                 %% "http4s-argonaut"        % http4sVersion,
     "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M6"
+
+
+
   )
 }
 
