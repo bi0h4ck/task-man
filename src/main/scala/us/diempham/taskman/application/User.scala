@@ -44,4 +44,10 @@ object UserStorage {
     database -= id
   }
 
+  def updateUser(id: Id)(f: User => User): Option[User] = {
+    val result = database.get(id).map(f)
+    result.map(createUser)
+    result
+  }
+
 }
