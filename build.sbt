@@ -62,3 +62,4 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:locals",              // Warn if a local definition is unused.
   "-Ywarn-unused:patvars"              // Warn if a variable bound in a pattern is unused.
 )
+scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
