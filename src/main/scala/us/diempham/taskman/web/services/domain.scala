@@ -5,7 +5,7 @@ import argonaut.CodecJson
 import argonaut._
 import Argonaut._
 import cats.effect.IO
-import org.http4s.argonaut.jsonOf
+import org.http4s.argonaut._
 import us.diempham.taskman.application.TaskStorage._
 import us.diempham.taskman.application.{TaskStorage, UserStorage}
 import us.diempham.taskman.application.TaskStorage.{Description, IsCompleted, TaskId, Title}
@@ -31,6 +31,18 @@ object domain {
     implicit def createTaskRequestCodecJson: CodecJson[CreateTaskRequest] =
       casecodec6(CreateTaskRequest.apply, CreateTaskRequest.unapply)("taskId", "userId", "title", "description", "isCompleted", "createdOn")
     implicit val taskDecoder = jsonOf[IO, CreateTaskRequest]
+  }
+
+  case class TaskResponse(taskId: TaskId,
+                          userId: TaskStorage.UserId,
+                          title: Title,
+                          description: Description,
+                          isCompleted: IsCompleted,
+                          createdOn: Instant)
+  object TaskResponse {
+    implicit def taskResponse: CodecJson[TaskResponse] = casecodec6(TaskResponse.apply, TaskResponse.unapply)("taskId", "userId", "title", "description", "isCompleted", "createdOn")
+    implicit val taskResponseDecoder = jsonOf[IO, TaskResponse]
+    implicit val taskResponseEncoder = jsonEncoderOf[IO, TaskResponse]
   }
 
 }

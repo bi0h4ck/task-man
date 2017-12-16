@@ -6,7 +6,7 @@ import org.http4s.dsl.io._
 import us.diempham.taskman.application.TaskStorage
 import us.diempham.taskman.application.TaskStorage.{IsCompleted, Task, TaskId}
 import us.diempham.taskman.database.InMemoryDatabase
-import us.diempham.taskman.web.services.domain.{CreateTaskRequest}
+import us.diempham.taskman.web.services.domain.{CreateTaskRequest, TaskResponse}
 
 class TaskService(taskStorage: InMemoryDatabase[TaskId, Task]) {
   val TASKS = "tasks"
@@ -22,7 +22,15 @@ class TaskService(taskStorage: InMemoryDatabase[TaskId, Task]) {
     case PUT -> Root / TASKS / taskId / "completed" =>
         taskStorage.update(TaskId(taskId))(task =>  task.copy(isCompleted = IsCompleted(true))) match {
           case None => NotFound()
-          case Some(_) => Ok(())
+          case Some(updatedTask) => Ok(taskToTaskResponse(updatedTask))
         }
+
+    case GET -> Root / TASKS / taskId =>
+      taskStorage.get(TaskId(taskId)) match {
+        case None => NotFound()
+        case Some(updatedTask) => Ok(taskToTaskResponse(updatedTask))
+      }
   }
+
+  def taskToTaskResponse(task: Task): TaskResponse = TaskResponse(task.taskId, task.userId, task.title, task.description, task.isCompleted, task.createdOn)
 }
