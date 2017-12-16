@@ -32,4 +32,5 @@ object domain {
       casecodec6(CreateTaskRequest.apply, CreateTaskRequest.unapply)("taskId", "userId", "title", "description", "isCompleted", "createdOn")
     implicit val taskDecoder = jsonOf[IO, CreateTaskRequest]
   }
+
 }
