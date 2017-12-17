@@ -54,6 +54,4 @@ object TaskStorage {
     implicit val taskDecoder = jsonOf[IO, Task]
   }
 
-
-
 }

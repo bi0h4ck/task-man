@@ -2,13 +2,14 @@ package us.diempham.taskman.web.services
 
 import java.util.UUID
 
+import cats.implicits._
 import cats.effect.IO
 import org.http4s._
 import org.http4s.dsl.io._
 import us.diempham.taskman.application.TaskStorage
 import us.diempham.taskman.application.TaskStorage.{IsCompleted, Task, TaskId}
 import us.diempham.taskman.database.InMemoryDatabase
-import us.diempham.taskman.web.services.domain.{CreateTaskRequest, TaskResponse}
+import us.diempham.taskman.web.services.domain.{CreateTaskRequest, taskToTaskResponse}
 import us.diempham.taskman.web.services.extractor.TaskIdExtractor
 
 class TaskService(taskStorage: InMemoryDatabase[TaskId, Task]) {
@@ -34,7 +35,6 @@ class TaskService(taskStorage: InMemoryDatabase[TaskId, Task]) {
         case None => NotFound()
         case Some(updatedTask) => Ok(taskToTaskResponse(updatedTask))
       }
-  }
+  }.handleError { x => println(x.getMessage()); throw x;}
 
-  def taskToTaskResponse(task: Task): TaskResponse = TaskResponse(task.taskId, task.userId, task.title, task.description, task.isCompleted, task.createdOn)
 }

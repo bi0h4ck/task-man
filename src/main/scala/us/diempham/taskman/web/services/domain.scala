@@ -51,6 +51,9 @@ object domain {
       casecodec6(TaskResponse.apply, TaskResponse.unapply)("taskId", "userId", "title", "description", "isCompleted", "createdOn")
     implicit val taskResponseDecoder = jsonOf[IO, TaskResponse]
     implicit val taskResponseEncoder = jsonEncoderOf[IO, TaskResponse]
+    implicit val listOfTaskResponseEncoder = jsonEncoderOf[IO, List[TaskResponse]]
   }
+
+  def taskToTaskResponse(task: Task): TaskResponse = TaskResponse(task.taskId, task.userId, task.title, task.description, task.isCompleted, task.createdOn)
 
 }

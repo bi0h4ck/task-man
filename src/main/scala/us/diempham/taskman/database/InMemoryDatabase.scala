@@ -3,7 +3,7 @@ package us.diempham.taskman.database
 import scala.collection.mutable;
 
 class InMemoryDatabase[K, V] extends DatabaseInterface[K, V] {
-  private val database: mutable.Map[K, V] = mutable.Map.empty[K, V]
+  protected val database: mutable.Map[K, V] = mutable.Map.empty[K, V]
 
   override def get(k: K): Option[V] = database.get(k)
 
@@ -23,5 +23,4 @@ class InMemoryDatabase[K, V] extends DatabaseInterface[K, V] {
     result.map(create(k, _))
     result
     }
-
 }
