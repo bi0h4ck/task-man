@@ -1,5 +1,7 @@
 package us.diempham.taskman.application
 
+import java.util.UUID
+
 import argonaut.CodecJson
 import argonaut._
 import Argonaut._
@@ -8,11 +10,11 @@ import org.http4s.argonaut._
 
 object UserStorage {
 
-  case class UserId(value: String) extends AnyVal
+  case class UserId(value: UUID) extends AnyVal
 
   object UserId {
-    implicit def idEncodeJson: EncodeJson[UserId] = jencode1[UserId, String](id => id.value)
-    implicit def idDecodeJson: DecodeJson[UserId] = jdecode1[String, UserId](idString => UserId(idString))
+    implicit def idEncodeJson: EncodeJson[UserId] = jencode1[UserId, UUID](id => id.value)
+    implicit def idDecodeJson: DecodeJson[UserId] = jdecode1[UUID, UserId](idString => UserId(idString))
   }
 
   case class Email(value: String) extends AnyVal
