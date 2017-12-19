@@ -23,4 +23,5 @@ class InMemoryDatabase[K, V] extends DatabaseInterface[K, V] {
     result.map(create(k, _))
     result
     }
+
 }

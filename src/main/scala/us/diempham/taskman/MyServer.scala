@@ -14,7 +14,7 @@ object MyServer extends StreamApp[IO] {
   val userDatabase = new InMemoryDatabase[UserId, User]
   val taskDatabase = new InMemoryTaskDatabase
   val userService = new UserService(userDatabase, taskDatabase)
-  val taskService = new TaskService(taskDatabase)
+  val taskService = new TaskService(taskDatabase, userDatabase)
 
   override def stream(args: List[String], requestShutdown: IO[Unit]): Stream[IO, ExitCode] =
     BlazeBuilder[IO]

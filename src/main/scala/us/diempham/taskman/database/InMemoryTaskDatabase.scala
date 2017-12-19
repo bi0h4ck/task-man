@@ -7,4 +7,7 @@ class InMemoryTaskDatabase extends InMemoryDatabase[TaskId, Task] with TaskDatab
   def getTasksForUser(userId: UserId): List[Task] = {
     database.filter { case (_, task) => task.userId == userId}.toList.map(_._2)
   }
+
+  override def create(k: TaskId, v: Task): Task = super.create(k, v)
+
 }
