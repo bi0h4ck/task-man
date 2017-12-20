@@ -9,7 +9,7 @@ import cats.effect.IO
 import org.http4s.argonaut._
 import us.diempham.taskman.application.TaskStorage._
 import us.diempham.taskman.application.TaskStorage.{Description, IsCompleted, TaskId, Title}
-import us.diempham.taskman.application.UserStorage.{Email, Password, UserId}
+import us.diempham.taskman.application.UserStorage.{Email, Password, User, UserId}
 
 object domain {
   case class CreateUserRequest(email: Email,
@@ -56,4 +56,22 @@ object domain {
 
   def taskToTaskResponse(task: Task): TaskResponse = TaskResponse(task.taskId, task.userId, task.title, task.description, task.isCompleted, task.createdOn)
 
+  case class LoginRequest(email: Email,
+                          password: Password)
+  object LoginRequest {
+    implicit def loginRequest: CodecJson[LoginRequest] = casecodec2(LoginRequest.apply, LoginRequest.unapply)("email", "password")
+    implicit val loginRequestDecoder = jsonOf[IO, LoginRequest]
+  }
+
+  case class Token(value: String)
+  object Token{
+    implicit val tokenEncoder: EncodeJson[Token] = jencode1[Token, String](token => token.toString)
+    implicit val tokenDecoder: DecodeJson[Token] = jdecode1[String, Token](tokenString => Token(tokenString))
+  }
+
+  case class LoginResponse(user: User, token: Token)
+  object LoginResponse {
+    implicit def loginResponse: CodecJson[LoginResponse] = casecodec2(LoginResponse.apply, LoginResponse.unapply)("user", "token")
+    implicit val loginResponseEncoder = jsonEncoderOf[IO, LoginResponse]
+  }
 }

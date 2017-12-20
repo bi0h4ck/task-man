@@ -1,18 +1,18 @@
 package us.diempham.taskman.web.services
 
 import java.util.UUID
+
 import cats.implicits._
 import cats.effect.IO
 import org.http4s._
 import org.http4s.dsl.io._
 import us.diempham.taskman.application.TaskStorage
 import us.diempham.taskman.application.TaskStorage.{IsCompleted, Task, TaskId}
-import us.diempham.taskman.application.UserStorage.{User, UserId}
-import us.diempham.taskman.database.{InMemoryDatabase, InMemoryTaskDatabase}
+import us.diempham.taskman.database.{InMemoryTaskDatabase, InMemoryUserDatabase}
 import us.diempham.taskman.web.services.domain.{CreateTaskRequest, taskToTaskResponse}
 import us.diempham.taskman.web.services.extractor.TaskIdExtractor
 
-class TaskService(taskStorage: InMemoryTaskDatabase, userStorage: InMemoryDatabase[UserId, User]) {
+class TaskService(taskStorage: InMemoryTaskDatabase, userStorage: InMemoryUserDatabase) {
   val TASKS = "tasks"
 
   val service = HttpService[IO] {
