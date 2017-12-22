@@ -13,9 +13,6 @@ libraryDependencies ++= {
     // Json suppoer
     "org.http4s"                 %% "http4s-argonaut"        % http4sVersion,
     "com.github.alexarchambault" %% "argonaut-shapeless_6.2" % "1.2.0-M6"
-
-
-
   )
 }
 
@@ -63,3 +60,5 @@ scalacOptions ++= Seq(
   "-Ywarn-unused:patvars"              // Warn if a variable bound in a pattern is unused.
 )
 scalacOptions in (Compile, console) --= Seq("-Ywarn-unused:imports", "-Xfatal-warnings")
+resolvers += Resolver.sonatypeRepo("releases")
+addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.4")

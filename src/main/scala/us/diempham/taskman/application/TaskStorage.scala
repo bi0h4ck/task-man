@@ -3,23 +3,19 @@ package us.diempham.taskman.application
 import argonaut._
 import Argonaut._
 import java.time.Instant
+import java.util.UUID
+
 import org.http4s.argonaut._
 import argonaut.CodecJson
 import cats.effect.IO
+import us.diempham.taskman.application.UserStorage.UserId
 
 object TaskStorage {
-  case class TaskId(value: String) extends AnyVal
+  case class TaskId(value: UUID) extends AnyVal
 
   object TaskId{
-    implicit def taskIdEncodeJson: EncodeJson[TaskId] = jencode1[TaskId, String](id => id.value)
-    implicit def taskIdDecodeJson: DecodeJson[TaskId] = jdecode1[String, TaskId](id => TaskId(id))
-  }
-
-  case class UserId(value: String) extends AnyVal
-
-  object UserId{
-    implicit def userIdEncodeJson: EncodeJson[UserId] = jencode1[UserId, String](id => id.value)
-    implicit def userIdDecodeJson: DecodeJson[UserId] = jdecode1[String, UserId](id => UserId(id))
+    implicit def taskIdEncodeJson: EncodeJson[TaskId] = jencode1[TaskId, UUID](id => id.value)
+    implicit def taskIdDecodeJson: DecodeJson[TaskId] = jdecode1[UUID, TaskId](id => TaskId(id))
   }
 
   case class Title(value: String) extends AnyVal
@@ -45,7 +41,6 @@ object TaskStorage {
 
     implicit def instantEncodeJson: EncodeJson[Instant] = jencode1[Instant, String](time => time.toString())
     implicit def instantDecodeJson: DecodeJson[Instant] = jdecode1[String, Instant](timeString => Instant.parse(timeString))
-
 
   case class Task(taskId: TaskId,
                   userId: UserId,
