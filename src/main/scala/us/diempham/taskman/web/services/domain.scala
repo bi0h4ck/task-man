@@ -65,7 +65,7 @@ object domain {
 
   case class Token(value: String)
   object Token{
-    implicit val tokenEncoder: EncodeJson[Token] = jencode1[Token, String](token => token.toString)
+    implicit val tokenEncoder: EncodeJson[Token] = jencode1[Token, String](token => token.value)
     implicit val tokenDecoder: DecodeJson[Token] = jdecode1[String, Token](tokenString => Token(tokenString))
   }
 

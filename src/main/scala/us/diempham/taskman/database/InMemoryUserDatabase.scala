@@ -8,4 +8,6 @@ class InMemoryUserDatabase extends InMemoryDatabase[UserId, User] with UserDatab
     database.find{ case (_, user) => user.email == givenEmail }.map(_._2)
   }
 
+
+
 }
